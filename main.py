@@ -11,10 +11,14 @@ def flip_card():
     label.config(text=current_word["RUS"], bg="#92c3b0", fg="white",
                  anchor=CENTER)
     canvas.itemconfig(card_img, image=card_back)
+    right["state"] = "normal"
+    wrong["state"] = "normal"
 
 
 def next_card(is_right):
     global current_word, to_repeat, to_learn, df
+    right["state"] = "disabled"
+    wrong["state"] = "disabled"
     if is_right:
         del to_learn[to_learn.index(current_word)]
         if len(to_learn) == 0:
@@ -46,10 +50,10 @@ canvas = Canvas(width=1000, height=800, bg=BACKGROUND_COLOR, highlightthickness=
 card_img = canvas.create_image(500, 300, image=card_front)
 canvas.pack()
 
-right = Button(image=right_png, borderwidth=0, highlightthickness=0, command=lambda: next_card(1))
+right = Button(image=right_png, borderwidth=0, highlightthickness=0, command=lambda: next_card(1), state="disabled")
 right.place(x=550, y=610)
 
-wrong = Button(image=wrong_png, borderwidth=0, highlightthickness=0, command=lambda: next_card(0))
+wrong = Button(image=wrong_png, borderwidth=0, highlightthickness=0, command=lambda: next_card(0), state="disabled")
 wrong.place(x=350, y=610)
 
 try:
