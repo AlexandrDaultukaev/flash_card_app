@@ -6,6 +6,7 @@ BACKGROUND_COLOR = "#B1DDC6"
 
 to_repeat = []
 
+
 def flip_card():
     label_top.config(text="RUS", bg="#92c3b0", fg="white")
     label.config(text=current_word["RUS"], bg="#92c3b0", fg="white",
