@@ -14,13 +14,16 @@ def flip_card():
 
 
 def next_card(is_right):
-    global current_word, to_repeat
+    global current_word, to_repeat, to_learn, df
     if is_right:
         del to_learn[to_learn.index(current_word)]
+        if len(to_learn) == 0:
+            df = pandas.read_csv("./data/english-russian.csv")
+            to_learn = df.to_dict(orient="records")
     else:
         to_repeat.append(current_word)
         data = pandas.DataFrame(to_repeat)
-        data.to_csv('/data/to_repeat.csv', index=False)
+        data.to_csv("./data/to_repeat.csv", index=False)
     canvas.itemconfig(card_img, image=card_front)
     current_word = random.choice(to_learn)
     label_top.config(text="ENG", bg="white", fg="black")
@@ -49,7 +52,11 @@ right.place(x=550, y=610)
 wrong = Button(image=wrong_png, borderwidth=0, highlightthickness=0, command=lambda: next_card(0))
 wrong.place(x=350, y=610)
 
-df = pandas.read_csv("./data/english-russian.csv")
+try:
+    df = pandas.read_csv("./data/to_repeat.csv")
+except FileNotFoundError:
+    df = pandas.read_csv("./data/english-russian.csv")
+
 to_learn = df.to_dict(orient="records")
 
 label_top = Label(text="ENG", font=("Ariel", 28, "italic"), bg="white")
