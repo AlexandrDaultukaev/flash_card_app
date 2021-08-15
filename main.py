@@ -4,6 +4,7 @@ import random
 
 BACKGROUND_COLOR = "#B1DDC6"
 
+to_repeat = []
 
 def flip_card():
     label_top.config(text="RUS", bg="#92c3b0", fg="white")
@@ -13,15 +14,19 @@ def flip_card():
 
 
 def next_card(is_right):
-    global current_word
+    global current_word, to_repeat
     if is_right:
         del to_learn[to_learn.index(current_word)]
+    else:
+        to_repeat.append(current_word)
+        data = pandas.DataFrame(to_repeat)
+        data.to_csv('/data/to_repeat.csv', index=False)
     canvas.itemconfig(card_img, image=card_front)
     current_word = random.choice(to_learn)
-    label_top.config(text="ENG", bg="white")
+    label_top.config(text="ENG", bg="white", fg="black")
     label.config(text=current_word["ENG"],
-                 anchor=CENTER, bg="white")
-    canvas.after(5000, flip_card)
+                 anchor=CENTER, bg="white", fg="black")
+    canvas.after(3000, flip_card)
 
 
 screen = Tk()
@@ -53,5 +58,5 @@ current_word = random.choice(to_learn)
 label = Label(text=current_word["ENG"], font=("Ariel", 38, "bold"),
               anchor=CENTER, bg="white")
 label.place(x=415, y=300)
-screen.after(5000, flip_card)
+screen.after(3000, flip_card)
 screen.mainloop()
